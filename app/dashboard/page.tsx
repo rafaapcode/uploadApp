@@ -1,4 +1,5 @@
 import DropZone from "@/components/Dropzone";
+import TableWrapper from "@/components/table/TableWrapper";
 import { db } from "@/firebase";
 import { FileType } from "@/typings";
 import { auth } from "@clerk/nextjs";
@@ -21,10 +22,10 @@ export default async function Dashboard() {
         <div className="border-t">
             <DropZone />
 
-            <section className="container space-y-5">
+            <section className="container space-y-5 mt-5">
                 <h2 className="font-bold">Todos os arquivos</h2>
                 <div>
-                    {/* <TableWrapper skeletonFile={skeletonFiles}/> */}
+                    <TableWrapper skeletonFiles={skeletonFiles}/>
                 </div>
             </section>
         </div>

@@ -37,6 +37,7 @@ export default function DropZone() {
         await uploadBytes(imageRef, selectedFile).then(async (snapshot) => {
             const downloadURL = await getDownloadURL(imageRef);
 
+            // Aqui ele está atualizando os dados no Banco de Dados ( Firestore );
             await updateDoc(doc(db, "users", user.id, "files", docRef.id), {
                 downloadURL,
             });
