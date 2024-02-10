@@ -18,6 +18,8 @@ import {
 import { FileType } from "@/typings"
 import { Button } from "../ui/button"
 import { PencilIcon, TrashIcon } from "lucide-react"
+import { useAppStore } from "@/store/store"
+import { DeleteModal } from "../DeleteModal"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -34,14 +36,17 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
+  const [fileId, setFileId, setIsDeleteModalOpen, filename, setFilename, setIsRenameModalOpen, isRenameModalOpen] = useAppStore(state => [state.fileId, state.setFileId, state.setIsDeleteModalOpen, state.filename, state.setFilename, state.setIsRenameModalOpen, state.isRenameModalOpen]);
+
   const openDeleteModal = (fileId: string) => {
-    // setFileId(fileId);
-    // setIsDeleteModalOpen(true);
+    setFileId(fileId);
+    setIsDeleteModalOpen(true);
   };
 
   const openRenameModal = (fileId: string, filename: string) => {
-    // setFileId(fileId);
-    // setIsDeleteModalOpen(true);
+    setFileId(fileId);
+    setFilename(filename);
+    setIsRenameModalOpen(true);
   };
 
   return (
@@ -72,6 +77,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
+                <DeleteModal />
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {cell.column.id === "timestamp" ? (

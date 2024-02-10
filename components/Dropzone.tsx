@@ -47,7 +47,7 @@ export default function DropZone() {
     }
 
     const onDrop = (acceptedFile: File[]) => {
-        acceptedFile.forEach((file) => {
+        acceptedFile.forEach((file: File) => {
             const reader = new FileReader();
 
             reader.onabort = () => console.log("Leitura do arquivo foi abortada !");
