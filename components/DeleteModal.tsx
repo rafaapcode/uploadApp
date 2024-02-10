@@ -2,10 +2,8 @@
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
@@ -14,33 +12,37 @@ import { useAppStore } from "@/store/store";
 import { useUser } from "@clerk/nextjs";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
+import toast from "react-hot-toast";
 
 export function DeleteModal() {
     const { user } = useUser();
-    const [isDeleteModalOpen, setIsDeleteModalOpen, fileId, setFileId] = useAppStore((state) => [
+    const [isDeleteModalOpen, setIsDeleteModalOpen, fileId] = useAppStore((state) => [
         state.isDeleteModalOpen,
         state.setIsDeleteModalOpen,
-        state.fileId,
-        state.setFileId
+        state.fileId
     ]);
 
     async function deleteFile() {
         if (!user || !fileId) return;
         const fileRef = ref(storage, `users/${user.id}/files/${fileId}`);
 
+        const toastId = toast.loading("Deletando arquivo");
+
         try {
             deleteObject(fileRef).then(async () => {
-                console.log("Deleted File");
-
                 deleteDoc(doc(db, "users", user.id, "files", fileId)).then(() => {
-                    console.log("Deleted");
+                    toast.success("Deletado com sucesso !!", {
+                        id: toastId
+                    });
                 });
             }).finally(() => {
                 setIsDeleteModalOpen(false);
             })
         } catch (error) {
-            console.error(error);
             setIsDeleteModalOpen(false);
+            toast.error("Erro ao deletar o arquivo", {
+                id: toastId
+            })
         }
     };
 
@@ -53,9 +55,9 @@ export function DeleteModal() {
         >
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Share link</DialogTitle>
+                    <DialogTitle>Excluir arquivo</DialogTitle>
                     <DialogDescription>
-                        Anyone who has this link will be able to view this.
+                        Deseja realmente excluir este arquivo ?
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex space-x-2 py-3">
@@ -63,7 +65,7 @@ export function DeleteModal() {
                         <span className="sr-only">Cancelar</span>
                         <span>Cancelar</span>
                     </Button>
-                    <Button type="submit" size="sm" className="px-3 flex-1" variant={"ghost"} onClick={() => deleteFile()}>
+                    <Button type="submit" size="sm" className="px-3 flex-1" variant={"destructive"} onClick={() => deleteFile()}>
                         <span className="sr-only">Excluir</span>
                         <span>Excluir</span>
                     </Button>

@@ -20,6 +20,7 @@ import { Button } from "../ui/button"
 import { PencilIcon, TrashIcon } from "lucide-react"
 import { useAppStore } from "@/store/store"
 import { DeleteModal } from "../DeleteModal"
+import RenameModal from "../RenameModal"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -36,7 +37,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const [fileId, setFileId, setIsDeleteModalOpen, filename, setFilename, setIsRenameModalOpen, isRenameModalOpen] = useAppStore(state => [state.fileId, state.setFileId, state.setIsDeleteModalOpen, state.filename, state.setFilename, state.setIsRenameModalOpen, state.isRenameModalOpen]);
+  const [setFileId, setIsDeleteModalOpen, setFilename, setIsRenameModalOpen] = useAppStore(state => [state.setFileId, state.setIsDeleteModalOpen, state.setFilename, state.setIsRenameModalOpen]);
 
   const openDeleteModal = (fileId: string) => {
     setFileId(fileId);
@@ -78,6 +79,7 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 <DeleteModal />
+                <RenameModal />
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {cell.column.id === "timestamp" ? (
@@ -105,7 +107,6 @@ export function DataTable<TData, TValue>({
 
                   </TableCell>
                 ))}
-
                 <TableCell key={(row.original as FileType).id}>
                   <Button variant={"outline"} onClick={() => {
 
