@@ -6,6 +6,7 @@ import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/fi
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useState } from 'react';
 import DropzoneComponent from 'react-dropzone'
+import toast from 'react-hot-toast';
 
 export default function DropZone() {
 
@@ -17,7 +18,7 @@ export default function DropZone() {
         if(!user) return;
 
         setLoading(true);
-
+        const toastId = toast.loading("Enviando arquivo...");
         // Criando um Documento (tabela) dentro da coleção (banco de dados) chamada USERS
         // O nome do documento será FILES, onde o ID é gerado automaticamente e os arquivos são os que estão no OBJ.
         const docRef = await addDoc(collection(db, "users", user.id, "files"), {
@@ -42,7 +43,9 @@ export default function DropZone() {
                 downloadURL,
             });
         });
-
+        toast.success("Arquivo enviado !!", {
+            id: toastId
+        });
         setLoading(false);
     }
 
@@ -61,7 +64,7 @@ export default function DropZone() {
     const maxSize = 20971520;
     return (
         <DropzoneComponent minSize={0} maxFiles={maxSize} onDrop={onDrop}>
-            {({ getRootProps, getInputProps, isDragActive, isDragReject, fileRejections }) => {
+            {({ getRootProps, isDragActive, isDragReject, fileRejections }) => {
             const isFileTooLarge = fileRejections.length > 0 && fileRejections[0].file.size > maxSize;
 
             return (
