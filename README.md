@@ -15,9 +15,7 @@ https://uploadapp.vercel.app/
 - Utilização do React-Drop para fazer o Drag'n Drop.
 
 ### OBS 
-- Por conta das políticas de segurança do Firebase , o upload foi bloqueado , ou seja, o arquivo ficará sendo enviado para sempre. Por conta disso também não será possível deletá-lo.
-- Estou estudando para mudar a regra de acesso do Firebase e conseguir liberar o upload novamente.
-
+- Por conta das políticas de segurança do Firebase , o upload foi bloqueado , ou seja, o arquivo ficará sendo enviado para sempre. Por conta disso também não será possível deletá-lo nem fazer download.
 
 # Imagens
 
